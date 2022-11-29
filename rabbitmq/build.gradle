@@ -1,5 +1,24 @@
 plugins {
     id 'io.micronaut.build.internal.rabbitmq-module'
+    id 'org.checkerframework' version '0.6.16'
+}
+
+apply plugin: 'org.checkerframework'
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+    mavenLocal()
+}
+
+checkerFramework {
+    checkers = [
+            'edu.ucr.cs.riple.taint.ucrtainting.UCRTaintingChecker',
+    ]
+    extraJavacArgs = [
+            '-Awarns',
+            '-AstubDebug'
+    ]
 }
 
 dependencies {
@@ -21,6 +40,8 @@ dependencies {
     testImplementation(libs.micronaut.micrometer.core) {
         exclude group: 'io.micronaut.reactor', module: 'micronaut-reactor'
     }
+    annotationProcessor 'edu.ucr.cs.riple.taint:ucrtainting-checker:0.1'
+    implementation 'edu.ucr.cs.riple.taint:ucrtainting-checker:0.1'
 }
 
 test {
